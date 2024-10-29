@@ -1,0 +1,72 @@
+cabal-version:      3.4
+name:               nixless-pkgs
+version:            0.1.0.0
+license:            AGPL-3.0-or-later
+license-file:       LICENSE
+author:             t4ccer
+maintainer:         t4ccer@gmail.com
+build-type:         Simple
+extra-doc-files:    CHANGELOG.md
+extra-source-files:
+
+common lang
+  ghc-options:        -Wall
+  default-extensions:
+    CPP
+    DeriveAnyClass
+    DerivingStrategies
+    DerivingVia
+    FlexibleContexts
+    FlexibleInstances
+    FunctionalDependencies
+    GeneralizedNewtypeDeriving
+    ImportQualifiedPost
+    LambdaCase
+    OverloadedStrings
+    RoleAnnotations
+    ScopedTypeVariables
+    TypeFamilies
+    TypeOperators
+    UndecidableInstances
+
+library
+  import:            lang
+  build-depends:     base ^>=4.18.2.1
+  hs-source-dirs:    src
+  default-language:  Haskell2010
+  c-sources:         cbits/wrapper.c
+  include-dirs:      cbits
+  pkgconfig-depends: nix-store-c, nix-expr-c
+  build-depends:
+    , base
+    , containers
+    , text
+
+  exposed-modules:
+    Nix.Bindings.Ffi
+    Nix.Bindings.Safe
+    Nix.Bindings.Safe.Builtins
+    Nix.Bindings.Safe.Derivation
+    Nix.Bindings.Safe.Error
+    Nix.Bindings.Safe.Store
+
+  other-modules:
+    Nix.Bindings.Safe.Internal
+    Nix.Bindings.Safe.Internal.ContextString
+    Nix.Bindings.Safe.Internal.FfiWrappers
+    Nix.Bindings.Safe.Internal.Value
+
+executable nixless-pkgs
+  import:           lang
+  main-is:          Main.hs
+  build-depends:
+    , base
+    , containers
+    , directory
+    , mtl
+    , nixless-pkgs
+    , text
+    , transformers
+
+  hs-source-dirs:   app
+  default-language: Haskell2010
